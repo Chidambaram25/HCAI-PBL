@@ -1,0 +1,97 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project 1 - Supervised Learning</title>
+    <link rel="stylesheet" href="{% static 'project1/style.css' %}">
+</head>
+<body>
+    <h1>Supervised Learning Interface</h1>
+
+    <h2>Upload your dataset</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="csv_file" accept=".csv">
+        <button type="submit">Upload</button>
+    </form>
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    {% if preview %}
+        <h2>Data Preview</h2>
+        {{ preview|safe }}
+
+        <h2>Visualize Data</h2>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="plot">
+
+            <label>X axis:</label>
+            <select name="col_x">
+                {% for col in columns %}
+                    <option value="{{ col }}">{{ col }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Y axis:</label>
+            <select name="col_y">
+                {% for col in columns %}
+                    <option value="{{ col }}">{{ col }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Generate Plot</button>
+        </form>
+
+        <h2>Train a Model</h2>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="train">
+
+            <label>Model:</label>
+            <select name="model_name">
+                <option value="knn">K-Nearest Neighbors</option>
+                <option value="dtree">Decision Tree</option>
+                <option value="svm">Support Vector Machine</option>
+            </select>
+
+            <br><br>
+
+            <label>Test set size (%):</label>
+            <input type="number" name="test_size" value="20" min="10" max="40">
+
+            <br><br>
+
+            <label>Hyperparameter value:</label>
+            <input type="number" name="hyperparam" value="5" min="1" max="50">
+            <small>(KNN: n_neighbors | Decision Tree: max_depth | SVM: C)</small>
+
+            <br><br>
+
+            <button type="submit">Train Model</button>
+        </form>
+    {% endif %}
+
+    {% if plot %}
+        <h2>Scatter Plot</h2>
+        <img src="data:image/png;base64,{{ plot }}" alt="scatter plot">
+    {% endif %}
+
+    {% if results %}
+        <h2>Training Results</h2>
+        <div class="results-box">
+            <p>Model: {{ results.model }}</p>
+            <p>Test size: {{ results.test_size }}%</p>
+            <p>Hyperparameter: {{ results.hyperparam }}</p>
+            <p>Train accuracy: {{ results.train_score }}</p>
+            <p>Test accuracy: {{ results.test_score }}</p>
+        </div>
+
+        <h2>Learning Curve</h2>
+        <img src="data:image/png;base64,{{ results.curve_plot }}" alt="learning curve">
+    {% endif %}
+
+</body>
+</html>
