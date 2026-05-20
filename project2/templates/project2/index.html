@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project 2 - Explainability</title>
+    <link rel="stylesheet" href="{% static 'project2/style.css' %}">
+</head>
+<body>
+    <h1>Explainability Interface</h1>
+
+    <h2>Model Selection</h2>
+    <form method="get">
+        <input type="hidden" name="lam" value="{{ lam }}">
+        <input type="hidden" name="plot_feature" value="{{ plot_feature }}">
+        <label>Model:</label>
+        <select name="model_type" onchange="this.form.submit()">
+            <option value="tree" {% if model_type == 'tree' %}selected{% endif %}>
+                Decision Tree</option>
+            <option value="logreg" {% if model_type == 'logreg' %}selected{% endif %}>
+                Logistic Regression</option>
+        </select>
+    </form>
+
+    <h2>Regularization (λ)</h2>
+    <form method="get">
+        <input type="hidden" name="model_type" value="{{ model_type }}">
+        <input type="hidden" name="plot_feature" value="{{ plot_feature }}">
+        <label>λ = <span id="lam-val">{{ lam }}</span></label>
+        <br>
+        <input type="range" name="lam"
+            min="0" max="1" step="0.01"
+            value="{{ lam }}"
+            oninput="document.getElementById('lam-val').textContent=parseFloat(this.value).toFixed(2)"
+            onmouseup="this.form.submit()"
+            ontouchend="this.form.submit()">
+    </form>
+
+    <h2>Results</h2>
+    <p>Model: {{ model_type }}</p>
+    <p>Test accuracy: {{ test_acc }}</p>
+
+    {% if model_type == 'tree' %}
+        <p>Number of leaves: {{ n_leaves }}</p>
+        {% if tree_img %}
+            <img src="data:image/png;base64,{{ tree_img }}"
+                 style="max-width:100%">
+        {% endif %}
+    {% else %}
+        <p>Complexity (Ω): {{ omega }}</p>
+        <p>C value: {{ C }}</p>
+    {% endif %}
+
+    <hr>
+    <h2>Feature Effect Plots</h2>
+    <form method="get">
+        <input type="hidden" name="model_type" value="{{ model_type }}">
+        <input type="hidden" name="lam" value="{{ lam }}">
+        <label>Feature:</label>
+        <select name="plot_feature" onchange="this.form.submit()">
+            {% for f in features %}
+                <option value="{{ f }}"
+                    {% if f == plot_feature %}selected{% endif %}>
+                    {{ f }}</option>
+            {% endfor %}
+        </select>
+    </form>
+
+    {% if effect_img %}
+        <img src="data:image/png;base64,{{ effect_img }}"
+             style="max-width:100%">
+    {% endif %}
+
+    <hr>
+    <h2>Counterfactual Explanations</h2>
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="counterfactual">
+        <input type="hidden" name="lam" value="{{ lam }}">
+        <input type="hidden" name="model_type" value="{{ model_type }}">
+
+        <label>Example index (0 to {{ n_examples }}):</label>
+        <input type="number" name="example_idx"
+               value="{{ example_idx|default:0 }}"
+               min="0" max="{{ n_examples }}">
+
+        <br><br>
+
+        <label>Target species:</label>
+        <select name="target_label">
+            {% for species in species_list %}
+                <option value="{{ species }}"
+                    {% if species == target %}selected{% endif %}>
+                    {{ species }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <br><br>
+        <button type="submit">Generate Counterfactuals</button>
+    </form>
+
+    {% if original %}
+        <h3>Original example (index {{ example_idx }})</h3>
+        <p>Current prediction: <strong>{{ current_pred }}</strong></p>
+        <ul>
+            {% for name, val in original %}
+                <li>{{ name }}: {{ val }}</li>
+            {% endfor %}
+        </ul>
+
+        {% if cf_found %}
+            <h3>Top counterfactuals for target: {{ target }}</h3>
+            {% for cf in counterfactuals %}
+                <p>Counterfactual {{ forloop.counter }}:</p>
+                <ul>
+                    {% for name, val in cf %}
+                        <li>{{ name }}: {{ val }}</li>
+                    {% endfor %}
+                </ul>
+            {% endfor %}
+        {% else %}
+            <p style="color:red;">No counterfactuals found.
+                Try a different example or target.</p>
+        {% endif %}
+    {% endif %}
+
+</body>
+</html>
