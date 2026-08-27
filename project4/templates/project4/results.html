@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Recommendations — Movie Preference Study</title>
+    <link rel="stylesheet" href="{% static 'project4/style.css' %}">
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <h1>Your Personalized Recommendations</h1>
+        <p class="subtitle">Based on your preferences, here are 5 movies we think you'll enjoy.</p>
+
+        {% for rec in recommendations %}
+        <div class="rec-card">
+            <div class="rec-title">{{ forloop.counter }}. {{ rec.title }}</div>
+            <div class="rec-meta">
+                {{ rec.genres }} &nbsp;·&nbsp;
+                {{ rec.year }} &nbsp;·&nbsp; {{ rec.duration }} min
+            </div>
+            <p style="font-size:13px; color:#888; margin-bottom:8px;">
+                How relevant is this recommendation to your taste?
+            </p>
+            <div class="star-rating">
+                <input type="radio" name="rating_{{ forloop.counter }}"
+                       id="s5_{{ forloop.counter }}" value="5">
+                <label for="s5_{{ forloop.counter }}">★</label>
+                <input type="radio" name="rating_{{ forloop.counter }}"
+                       id="s4_{{ forloop.counter }}" value="4">
+                <label for="s4_{{ forloop.counter }}">★</label>
+                <input type="radio" name="rating_{{ forloop.counter }}"
+                       id="s3_{{ forloop.counter }}" value="3">
+                <label for="s3_{{ forloop.counter }}">★</label>
+                <input type="radio" name="rating_{{ forloop.counter }}"
+                       id="s2_{{ forloop.counter }}" value="2">
+                <label for="s2_{{ forloop.counter }}">★</label>
+                <input type="radio" name="rating_{{ forloop.counter }}"
+                       id="s1_{{ forloop.counter }}" value="1">
+                <label for="s1_{{ forloop.counter }}">★</label>
+            </div>
+        </div>
+        {% endfor %}
+
+        <hr class="divider">
+
+        <h2>Quick feedback</h2>
+        <p class="text-muted">Please answer the following three questions about your experience.</p>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="questionnaire-item">
+                <label>1. How easy was the preference elicitation task? (1 = very difficult, 5 = very easy)</label>
+                <input type="range" name="ease" min="1" max="5" step="1" value="3">
+                <div class="scale-labels">
+                    <span>1 — Very difficult</span>
+                    <span>3 — Neutral</span>
+                    <span>5 — Very easy</span>
+                </div>
+            </div>
+
+            <div class="questionnaire-item">
+                <label>2. How satisfied are you with the movie recommendations? (1 = not at all, 5 = very satisfied)</label>
+                <input type="range" name="satisfaction" min="1" max="5" step="1" value="3">
+                <div class="scale-labels">
+                    <span>1 — Not satisfied</span>
+                    <span>3 — Neutral</span>
+                    <span>5 — Very satisfied</span>
+                </div>
+            </div>
+
+            <div class="questionnaire-item">
+                <label>3. How confident are you that the recommendations reflect your actual preferences? (1 = not at all, 5 = very confident)</label>
+                <input type="range" name="confidence" min="1" max="5" step="1" value="3">
+                <div class="scale-labels">
+                    <span>1 — Not confident</span>
+                    <span>3 — Neutral</span>
+                    <span>5 — Very confident</span>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button type="submit" class="btn btn-primary">
+                    Submit and finish →
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

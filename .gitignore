@@ -172,3 +172,11 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+project3/saved_models/
+
+# Project specific
+data/
+test_dataset.py
+test_duplicates.py
+test_imdb.py

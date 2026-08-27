@@ -1,0 +1,115 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Study — Movie Preference Study</title>
+    <link rel="stylesheet" href="{% static 'project4/style.css' %}">
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <p class="progress-label">Round {{ round }} of {{ max_rounds }}</p>
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill" style="width:{{ progress }}%"></div>
+        </div>
+
+        {% if design == 'pairwise' %}
+        <h2>Which movie would you prefer to watch?</h2>
+        <p class="text-muted">Click the button under your preferred movie.</p>
+
+        <div class="movie-grid">
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="winner" value="{{ movies.0.index }}">
+                <input type="hidden" name="loser" value="{{ movies.1.index }}">
+                <div class="movie-card">
+                    <div class="movie-title">{{ movies.0.title }}</div>
+                    <div class="movie-meta">
+                        {{ movies.0.genres }}<br>
+                        {{ movies.0.year }} &nbsp;·&nbsp; {{ movies.0.duration }} min
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width:100%">
+                        I'd prefer to watch this
+                    </button>
+                </div>
+            </form>
+
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="winner" value="{{ movies.1.index }}">
+                <input type="hidden" name="loser" value="{{ movies.0.index }}">
+                <div class="movie-card">
+                    <div class="movie-title">{{ movies.1.title }}</div>
+                    <div class="movie-meta">
+                        {{ movies.1.genres }}<br>
+                        {{ movies.1.year }} &nbsp;·&nbsp; {{ movies.1.duration }} min
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width:100%">
+                        I'd prefer to watch this
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        {% else %}
+        <h2>Rank these movies from most to least preferred</h2>
+        <p class="text-muted">
+            Drag and drop to reorder — <strong>most preferred at the top</strong>,
+            least preferred at the bottom. Click confirm when done.
+        </p>
+
+        <form method="post" id="ranking-form">
+            {% csrf_token %}
+            <input type="hidden" name="ranking_order" id="ranking_order">
+
+            <ul class="sortable-list" id="sortable">
+                {% for movie in movies %}
+                <li class="sortable-item" data-id="{{ movie.index }}">
+                    <span class="drag-handle">⠿</span>
+                    <span class="rank-number">{{ forloop.counter }}</span>
+                    <div>
+                        <div class="movie-title">{{ movie.title }}</div>
+                        <div class="movie-meta">
+                            {{ movie.genres }} &nbsp;·&nbsp;
+                            {{ movie.year }} &nbsp;·&nbsp; {{ movie.duration }} min
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <div class="btn-group mt-24">
+                <button type="submit" class="btn btn-primary"
+                        onclick="submitRanking(event)">
+                    Confirm this ranking →
+                </button>
+            </div>
+        </form>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+        <script>
+        Sortable.create(document.getElementById('sortable'), {
+            animation: 150,
+            handle: '.drag-handle',
+            onEnd: function() {
+                const items = document.querySelectorAll('.sortable-item');
+                items.forEach((item, i) => {
+                    item.querySelector('.rank-number').textContent = i + 1;
+                });
+            }
+        });
+
+        function submitRanking(event) {
+            event.preventDefault();
+            const items = document.querySelectorAll('.sortable-item');
+            const order = Array.from(items).map(el => el.dataset.id);
+            document.getElementById('ranking_order').value = order.join(',');
+            document.getElementById('ranking-form').submit();
+        }
+        </script>
+        {% endif %}
+
+    </div>
+</div>
+</body>
+</html>

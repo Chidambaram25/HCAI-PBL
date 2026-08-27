@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Instructions — Movie Preference Study</title>
+    <link rel="stylesheet" href="{% static 'project4/style.css' %}">
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <h1>Instructions</h1>
+        <p class="subtitle">Please read carefully before starting.</p>
+
+        {% if design == 'pairwise' %}
+        <div class="alert alert-info">
+            You will complete <strong>10 rounds</strong> of pairwise movie comparisons.
+        </div>
+
+        <div class="instruction-step">
+            <div class="instruction-number">1</div>
+            <div>
+                <h3>You will be shown two movies</h3>
+                <p>Each round presents two movies side by side with their title,
+                genre, year, and duration.</p>
+            </div>
+        </div>
+
+        <div class="instruction-step">
+            <div class="instruction-number">2</div>
+            <div>
+                <h3>Choose the one you would prefer to watch</h3>
+                <p>Click the button under the movie you would rather watch.
+                There are no right or wrong answers — go with your genuine preference.</p>
+            </div>
+        </div>
+
+        <div class="instruction-step">
+            <div class="instruction-number">3</div>
+            <div>
+                <h3>Repeat for 10 rounds</h3>
+                <p>After 10 comparisons, you will receive personalized movie
+                recommendations based on your choices.</p>
+            </div>
+        </div>
+
+        {% else %}
+        <div class="alert alert-info">
+            You will complete <strong>2 ranking tasks</strong>, each with 10 movies.
+        </div>
+
+        <div class="instruction-step">
+            <div class="instruction-number">1</div>
+            <div>
+                <h3>You will be shown 10 movies</h3>
+                <p>Each task presents a list of 10 movies with their title,
+                genre, year, and duration.</p>
+            </div>
+        </div>
+
+        <div class="instruction-step">
+            <div class="instruction-number">2</div>
+            <div>
+                <h3>Drag and drop to rank them</h3>
+                <p>Arrange the movies from <strong>most preferred</strong> (top)
+                to <strong>least preferred</strong> (bottom) by dragging the items.
+                Go with your genuine preference — there are no right or wrong answers.</p>
+            </div>
+        </div>
+
+        <div class="instruction-step">
+            <div class="instruction-number">3</div>
+            <div>
+                <h3>Repeat for 2 rounds</h3>
+                <p>After 2 ranking tasks, you will receive personalized movie
+                recommendations based on your rankings.</p>
+            </div>
+        </div>
+        {% endif %}
+
+        <hr class="divider">
+
+        <div class="alert alert-warning">
+            <strong>Important:</strong> Please base your choices on your genuine
+            movie preferences, not on what you think is the "correct" answer.
+            The quality of your recommendations depends on honest responses.
+        </div>
+
+        <div class="btn-group">
+            <a href="{% url 'project4:study' %}" class="btn btn-primary">
+                Start the study →
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Thank You — Movie Preference Study</title>
+    <link rel="stylesheet" href="{% static 'project4/style.css' %}">
+</head>
+<body>
+<div class="container">
+    <div class="card text-center">
+        <div style="font-size:64px; margin-bottom:16px;">🎬</div>
+        <h1>Thank you for participating!</h1>
+        <p class="subtitle">Your responses have been recorded.</p>
+
+        <hr class="divider">
+
+        <p>Your participation helps us understand how different preference
+        elicitation methods affect the quality of movie recommendations.</p>
+
+        <p>The study compared two approaches:</p>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr;
+                    gap:16px; margin:24px 0; text-align:left;">
+            <div class="consent-box">
+                <h3>Design 1</h3>
+                <p>Repeated pairwise comparisons — choosing between two movies
+                at a time across 10 rounds.</p>
+            </div>
+            <div class="consent-box">
+                <h3>Design 2</h3>
+                <p>Ranking tasks — ordering 10 movies from most to least
+                preferred across 2 rounds.</p>
+            </div>
+        </div>
+
+        <p>If you have any questions about this study, please contact
+        the research team.</p>
+
+        <div class="btn-group" style="justify-content:center; margin-top:32px;">
+            <a href="{% url 'project4:index' %}" class="btn btn-secondary">
+                Return to home page
+            </a>
+        </div>
+
+        <p class="text-muted mt-24">
+            Human-Centric Artificial Intelligence course — 2026
+        </p>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Consent Form — Movie Preference Study</title>
+    <link rel="stylesheet" href="{% static 'project4/style.css' %}">
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <h1>Informed Consent</h1>
+        <p class="subtitle">Please read the following information carefully before proceeding.</p>
+
+        {% if declined %}
+        <div class="alert alert-warning">
+            You have declined to participate. You may close this page.
+            If you change your mind, <a href="{% url 'project4:consent' %}">click here</a> to return.
+        </div>
+        {% endif %}
+
+        <div class="consent-box">
+            <h3>Study purpose</h3>
+            <p>You are invited to participate in a study comparing two methods for
+            eliciting movie preferences. The goal is to evaluate which method produces
+            better personalized recommendations.</p>
+        </div>
+
+        <div class="consent-box">
+            <h3>What you will do</h3>
+            <ul>
+                <li>Express your movie preferences through a short interactive task</li>
+                <li>Receive personalized movie recommendations</li>
+                <li>Rate the quality of the recommendations</li>
+                <li>Answer a brief questionnaire about your experience</li>
+            </ul>
+        </div>
+
+        <div class="consent-box">
+            <h3>Time required</h3>
+            <p>Approximately <strong>5–10 minutes.</strong></p>
+        </div>
+
+        <div class="consent-box">
+            <h3>Confidentiality</h3>
+            <p>Your responses are anonymous. No personally identifiable information
+            is collected. Data is used solely for academic research purposes.</p>
+        </div>
+
+        <div class="consent-box">
+            <h3>Voluntary participation</h3>
+            <p>Participation is entirely voluntary. You may withdraw at any time
+            by closing the browser window without any consequence.</p>
+        </div>
+
+        <hr class="divider">
+
+        <p><strong>By clicking "I agree", you confirm that:</strong></p>
+        <ul style="padding-left:20px; margin-bottom:24px;">
+            <li style="margin-bottom:6px; font-size:14px;">You are 18 years of age or older</li>
+            <li style="margin-bottom:6px; font-size:14px;">You have read and understood the above information</li>
+            <li style="margin-bottom:6px; font-size:14px;">You voluntarily agree to participate in this study</li>
+        </ul>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="btn-group">
+                <button type="submit" name="consent" value="yes"
+                        class="btn btn-primary">
+                    I agree — begin the study
+                </button>
+                <button type="submit" name="consent" value="no"
+                        class="btn btn-danger">
+                    I do not agree
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

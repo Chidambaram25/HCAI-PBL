@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project 3 - Active Learning for L2D</title>
+    <link rel="stylesheet" href="{% static 'project3/style.css' %}">
+</head>
+<body>
+    <h1>Active Learning for Learning-to-Defer</h1>
+
+    <h2>Task 1: Baseline classifier</h2>
+    <div class="results-box">
+        <p>Model: TF-IDF + Logistic Regression</p>
+        <p>Test accuracy: {{ baseline_acc }}</p>
+    </div>
+
+    <h2>Task 2: Simulated expert</h2>
+    <div class="results-box">
+        <p>Overall accuracy: {{ expert_overall_acc }}</p>
+        <p>World: {{ expert_world_acc }} | Sports: {{ expert_sports_acc }}</p>
+        <p>Business: {{ expert_business_acc }} | Sci/Tech: {{ expert_scitech_acc }}</p>
+    </div>
+    <img src="{% static 'project3/expert_confusion_matrix.png' %}">
+
+    <h2>Task 3: Learning to defer</h2>
+    <div class="results-box">
+        <p>Best threshold: {{ l2d_best_threshold }}</p>
+        <p>System accuracy at best threshold: {{ l2d_best_acc }}</p>
+        <p>(beats baseline of {{ baseline_acc }})</p>
+    </div>
+    <img src="{% static 'project3/l2d_tradeoff.png' %}">
+
+    <h2>Task 4: Active learning</h2>
+    <div class="results-box">
+        <p>Uncertainty sampling accuracy: {{ al_uncertainty_acc }}</p>
+        <p>Random sampling accuracy: {{ al_random_acc }}</p>
+    </div>
+    <img src="{% static 'project3/active_learning_comparison.png' %}">
+
+    <h2>Full report</h2>
+    <a href="{% static 'project3/Project3_Report.pdf' %}" download>
+        <button>Download PDF report</button>
+    </a>
+
+</body>
+</html>

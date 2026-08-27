@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Movie Preference Study</title>
+    <link rel="stylesheet" href="{% static 'project4/style.css' %}">
+</head>
+<body>
+<div class="container">
+    <div class="card text-center">
+        <h1>🎬 Movie Preference Elicitation Study</h1>
+        <p class="subtitle">A user study comparing two methods for learning your movie preferences</p>
+
+        <hr class="divider">
+
+        <p>This study investigates how different preference elicitation methods affect
+        the quality of movie recommendations. Your participation helps us understand
+        which approach better captures what you enjoy watching.</p>
+
+        <p>The study takes approximately <strong>5–10 minutes</strong> to complete.</p>
+
+        <div class="alert alert-info mt-24">
+            <strong>Before you begin:</strong> You will be asked to express your movie
+            preferences through a short interactive task. Based on your responses,
+            the system will generate personalized movie recommendations for you.
+        </div>
+
+        <div class="btn-group" style="justify-content:center; margin-top:32px;">
+            <a href="{% static 'project4/report.pdf' %}" class="btn btn-secondary" download>
+                📄 Download Report (PDF)
+            </a>
+            <a href="{% url 'project4:consent' %}" class="btn btn-primary">
+                Begin the Study →
+            </a>
+        </div>
+
+        <p class="text-muted mt-24">
+            This study is conducted as part of the Human-Centric Artificial Intelligence course.
+        </p>
+    </div>
+</div>
+</body>
+</html>
